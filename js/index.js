@@ -1,5 +1,5 @@
 document.routePoints = [
-    [ 50, 50 ], [ 200, 130 ], [ 400, 230 ], [ 100, 320 ]
+    [ 100, 100 ], [ 300, 230 ], [ 500, 350 ], [ 680, 235 ], [850, 100]
 ]
 
 var Personage = function ( params ) {
@@ -17,14 +17,13 @@ var Personage = function ( params ) {
                   this.defaultRoute : params.routePoints
     this.setRoutePoints ()
     this.nextPoint = 1
-    this.currentPosition = this.route [0]
+    this.currentPosition = this.route [1]
     this.velocity = !params || !params.velocity
                             || typeof params.velocity !== "number"
                             ? 5 : params.velocity
     this.delay = !params || !params.timeInterval
                          || typeof params.timeInterval !== "number"
                          ? 100 : params.timeInterval
-    this.interval = setInterval ( this.mc_personage.bind ( this ), this.delay )
 }
 
 Personage.prototype.setRoutePoints = function () {
@@ -82,15 +81,15 @@ Personage.prototype.mc_personage = function ( event ) {
 }
 
 Personage.prototype.defaultRoute = [
-		[ 50, 50 ], [ 300, 300 ], [ 100, 300 ], [ 200, 50 ]
+		[ 100, 100 ], [ 200, 200 ], [300, 300], [200, 200], [100, 100]
 ]
-Personage.prototype.defaultPersonageImage = "./images/personage.gif"
-Personage.prototype.defaultPointImage = "./images/tree.gif"
+Personage.prototype.defaultPersonageImage = "./images/parsonage2.gif"
+Personage.prototype.defaultPointImage = "./images/tree2.jpg"
 
 Personage.prototype.personageStyle = {
 		position: "fixed",
-    top: 0,
-    left: 0,
+    top: "200px",
+    left: 50,
     width: "50px",
     height: "auto"
 }
@@ -98,14 +97,42 @@ Personage.prototype.pointStyle = {
 		position: "fixed",
     top: 0,
     left: 0,
-    width: "80px",
-    height: "80px",
+    width: "100px",
+    height: "145px",
     backgroundRepeat: "no-repeat",
     backgroundSize: "contain",
     backgroundPosition: "center center",
     backgroundImage: "url(" + this.defaultPointImage + ")"
 }
 
+Personage.prototype.startButton = "startButton";
+
+Personage.prototype.moveThePersonage = function() {
+  this.interval = setInterval ( this.mc_personage.bind ( this ), this.delay );
+}
+
+Personage.prototype.bindStartButton = function() {
+    var self = this;
+
+    document.getElementById(this.startButton).onclick = function(e) {
+        self.moveThePersonage();
+    }
+}
+
+Personage.prototype.stopButton = "stopButton";
+
+Personage.prototype.bindStopButton = function() {
+    var self = this;
+
+    document.getElementById(this.stopButton).onclick = function(e) {
+        clearInterval(self.interval);
+    }
+}
+
+
 document.personage = new Personage ( {
       routePoints: document.routePoints
 })
+
+document.personage.bindStartButton();
+document.personage.bindStopButton();
